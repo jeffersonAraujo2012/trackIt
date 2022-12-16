@@ -1,36 +1,39 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { UserContext } from "../App";
 import logo from "../assets/images/logo.svg";
 import BtnBlue from "../components/forms/BtnBlue";
 import Input from "../components/forms/Input";
 
-export default function Login() {
+export default function SignUp() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const {setUser} = useContext(UserContext);
+  const [name, setName] = useState<string>("");
+  const [photo, setPhoto] = useState<string>("");
 
-  function login(e: React.FormEvent) {
+  const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  function signUp(e: React.FormEvent) {
     e.preventDefault();
 
     setLoading(true);
 
     const data = {
       email: email,
-      password: password
+      password: password,
+      name: name,
+      image: photo,
     }
 
-    const promiseLogin = axios.post(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", data
+    const promiseSignUp = axios.post(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", data
     );
-    promiseLogin.then((res) => {
-      const userLogged = res.data;
-      setUser(userLogged);
+    promiseSignUp.then((res) => {
+      if (res.status === 201) navigate("/");
     });
-    promiseLogin.catch((error) => {
+    promiseSignUp.catch((error) => {
       setLoading(false);
       alert(error.response.data.message);
     });
@@ -39,7 +42,7 @@ export default function Login() {
   return (
     <StyledLogin>
       <img src={logo} alt="TrackIt" />
-      <form onSubmit={login}>
+      <form onSubmit={signUp}>
         <Input
           type="email"
           placeholder="Email"
@@ -54,9 +57,23 @@ export default function Login() {
           value={password}
           disabled={loading ? true : false}
         />
-        <BtnBlue text="Entrar" disabled={loading ? true : false}/>
+        <Input
+          type="text"
+          placeholder="Nome"
+          onChange={(e) => setName(e.currentTarget.value)}
+          value={name}
+          disabled={loading ? true : false}
+        />
+        <Input
+          type="text"
+          placeholder="photo"
+          onChange={(e) => setPhoto(e.currentTarget.value)}
+          value={photo}
+          disabled={loading ? true : false}
+        />
+        <BtnBlue text="Cadastrar" disabled={loading ? true : false}/>
       </form>
-      <Link to="/cadastro">Não tem uma conta? Cadastre-se!</Link>
+      <Link to="/">Já tem uma conta? Faça login!</Link>
     </StyledLogin>
   );
 }

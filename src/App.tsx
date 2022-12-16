@@ -2,6 +2,7 @@ import React, { createContext, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./css/reset.css";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 
 interface IUser {
   id: number;
@@ -30,6 +31,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/cadastro" element={<SignUp />} />
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>
