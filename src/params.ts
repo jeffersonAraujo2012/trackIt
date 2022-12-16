@@ -1,0 +1,1 @@
+export const HEADER_HIGHT: string = "70px";
