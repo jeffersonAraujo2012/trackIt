@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { UserContext } from "../App";
 import logo from "../assets/images/logo.svg";
@@ -11,7 +11,8 @@ export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const {setUser} = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   function login(e: React.FormEvent) {
     e.preventDefault();
@@ -20,15 +21,21 @@ export default function Login() {
 
     const data = {
       email: email,
-      password: password
-    }
+      password: password,
+    };
 
     const promiseLogin = axios.post(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", data
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login",
+      data
     );
     promiseLogin.then((res) => {
       const userLogged = res.data;
+      delete userLogged.password;
+
+      localStorage.setItem("user", JSON.stringify(userLogged));
       setUser(userLogged);
+
+      navigate("/habitos");
     });
     promiseLogin.catch((error) => {
       setLoading(false);
@@ -54,7 +61,7 @@ export default function Login() {
           value={password}
           disabled={loading ? true : false}
         />
-        <BtnBlue text="Entrar" disabled={loading ? true : false}/>
+        <BtnBlue text="Entrar" disabled={loading ? true : false} />
       </form>
       <Link to="/cadastro">Não tem uma conta? Cadastre-se!</Link>
     </StyledLogin>
