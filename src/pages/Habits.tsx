@@ -42,7 +42,12 @@ export default function Habits() {
       <StyledHabits>
         <header>
           <span>Meus hábitos</span>
-          <button onClick={() => setShowHabitForm(true)}>+</button>
+          <button
+            onClick={() => setShowHabitForm(true)}
+            data-test="habit-create-btn"
+          >
+            +
+          </button>
         </header>
 
         {showHabitForm && <InsertHabitForm setShow={setShowHabitForm} />}

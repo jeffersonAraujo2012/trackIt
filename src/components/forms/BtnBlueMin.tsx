@@ -4,11 +4,12 @@ import { ThreeDots } from "react-loader-spinner";
 interface IBtnBlue {
   text: string;
   disabled: boolean;
+  dataTest?: string;
 }
 
-export default function BtnBlueMin({ text, disabled }: IBtnBlue) {
+export default function BtnBlueMin({ text, disabled, dataTest }: IBtnBlue) {
   return (
-    <StyledBtnBlue disabled={disabled}>
+    <StyledBtnBlue disabled={disabled} data-test={dataTest}>
       {disabled ? (
         <ThreeDots
           height="35"

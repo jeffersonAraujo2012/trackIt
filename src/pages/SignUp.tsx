@@ -49,6 +49,7 @@ export default function SignUp() {
           onChange={(e) => setEmail(e.currentTarget.value)}
           value={email}
           disabled={loading ? true : false}
+          dataTest="email-input"
         />
         <Input
           type="password"
@@ -56,6 +57,7 @@ export default function SignUp() {
           onChange={(e) => setPassword(e.currentTarget.value)}
           value={password}
           disabled={loading ? true : false}
+          dataTest="password-input"
         />
         <Input
           type="text"
@@ -63,6 +65,7 @@ export default function SignUp() {
           onChange={(e) => setName(e.currentTarget.value)}
           value={name}
           disabled={loading ? true : false}
+          dataTest="user-name-input"
         />
         <Input
           type="text"
@@ -70,10 +73,11 @@ export default function SignUp() {
           onChange={(e) => setPhoto(e.currentTarget.value)}
           value={photo}
           disabled={loading ? true : false}
+          dataTest="user-image-input"
         />
-        <BtnBlue text="Cadastrar" disabled={loading ? true : false}/>
+        <BtnBlue text="Cadastrar" disabled={loading ? true : false} dataTest="signup-btn"/>
       </form>
-      <Link to="/">Já tem uma conta? Faça login!</Link>
+      <Link to="/" data-test="login-link">Já tem uma conta? Faça login!</Link>
     </StyledLogin>
   );
 }

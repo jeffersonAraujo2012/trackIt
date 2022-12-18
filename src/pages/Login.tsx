@@ -53,6 +53,7 @@ export default function Login() {
           onChange={(e) => setEmail(e.currentTarget.value)}
           value={email}
           disabled={loading ? true : false}
+          dataTest="email-input"
         />
         <Input
           type="password"
@@ -60,10 +61,17 @@ export default function Login() {
           onChange={(e) => setPassword(e.currentTarget.value)}
           value={password}
           disabled={loading ? true : false}
+          dataTest="password-input"
         />
-        <BtnBlue text="Entrar" disabled={loading ? true : false} />
+        <BtnBlue
+          text="Entrar"
+          disabled={loading ? true : false}
+          dataTest="login-btn"
+        />
       </form>
-      <Link to="/cadastro">Não tem uma conta? Cadastre-se!</Link>
+      <Link to="/cadastro" data-test="signup-link">
+        Não tem uma conta? Cadastre-se!
+      </Link>
     </StyledLogin>
   );
 }

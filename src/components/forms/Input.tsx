@@ -6,6 +6,7 @@ interface IInputText {
   onChange: (e: React.FormEvent<HTMLInputElement>) => void;
   value: string;
   disabled: boolean;
+  dataTest?: string;
 }
 
 export default function Input({
@@ -14,6 +15,7 @@ export default function Input({
   onChange,
   value,
   disabled,
+  dataTest
 }: IInputText) {
   return (
     <StyledInputText
@@ -23,6 +25,7 @@ export default function Input({
       value={value}
       required
       disabled={disabled}
+      data-test={dataTest}
     />
   );
 }

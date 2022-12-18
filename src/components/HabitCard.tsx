@@ -47,8 +47,8 @@ export default function HabitCard({ hbt }: IHabitCardProps) {
   }
 
   return (
-    <StyledHabitCard>
-      <p>{name}</p>
+    <StyledHabitCard data-test="habit-container">
+      <p data-test="habit-name">{name}</p>
       <div>
         {letterWeekdays.split("").map((letter, index) => (
           <BtnDay text={letter} selected={days.includes(index)} key={index} />
@@ -58,6 +58,7 @@ export default function HabitCard({ hbt }: IHabitCardProps) {
         src={deleteIcon}
         alt={`Deletar hábito: ${name}`}
         onClick={deleteHabit}
+        data-test="habit-delete-btn"
       />
     </StyledHabitCard>
   );

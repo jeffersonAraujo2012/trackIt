@@ -53,20 +53,24 @@ export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
       setSelectedsDays([]);
       setShow(false);
       setHabits([...habits, res.data]);
-      console.log(res.data)
+      console.log(res.data);
     });
     promiseAddHabit.catch((error) => alert(error.response.data.message));
     promiseAddHabit.finally(() => setLoading(false));
   }
 
   return (
-    <StyledInsertHabitForm onSubmit={addHabit}>
+    <StyledInsertHabitForm
+      onSubmit={addHabit}
+      data-test="habit-create-container"
+    >
       <Input
         type="text"
         placeholder="nome do hábito"
         value={habitName}
         onChange={(e) => setHabitName(e.currentTarget.value)}
         disabled={loading}
+        dataTest="habit-name-input"
       />
 
       <div>
@@ -86,10 +90,15 @@ export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
       </div>
 
       <div className="btnArea">
-        <button type="button" onClick={() => setShow(false)} disabled={loading}>
+        <button
+          type="button"
+          onClick={() => setShow(false)}
+          disabled={loading}
+          data-test="habit-create-cancel-btn"
+        >
           Cancelar
         </button>
-        <BtnBlueMin text="Salvar" disabled={loading} />
+        <BtnBlueMin text="Salvar" disabled={loading} dataTest="habit-create-save-btn" />
       </div>
     </StyledInsertHabitForm>
   );

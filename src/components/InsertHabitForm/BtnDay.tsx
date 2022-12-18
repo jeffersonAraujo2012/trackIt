@@ -26,6 +26,7 @@ export default function BtnDay({
       selected={selected}
       onClick={onClick}
       disabled={disabled}
+      data-test="habit-day"
     >
       {text}
     </StyledBtnDay>

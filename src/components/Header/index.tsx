@@ -10,7 +10,7 @@ export default function Header() {
     if (userStorage) user = JSON.parse(userStorage);
   }
   return(
-    <StyledHeader>
+    <StyledHeader data-test="header">
       <span>TrackIt</span>
       <img src={user?.image} alt={user?.name} />
     </StyledHeader>
