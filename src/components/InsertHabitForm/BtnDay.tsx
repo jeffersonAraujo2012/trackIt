@@ -4,19 +4,29 @@ import styled from "styled-components";
 interface IBtnDayProp {
   text: string;
   selected: boolean;
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
 }
 
 interface ISBtnDayProp {
   selected: boolean;
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
 }
 
-export default function BtnDay({ text, selected, onClick, disabled }: IBtnDayProp) {
+export default function BtnDay({
+  text,
+  selected,
+  onClick,
+  disabled,
+}: IBtnDayProp) {
   return (
-    <StyledBtnDay type="button" selected={selected} onClick={onClick}>
+    <StyledBtnDay
+      type="button"
+      selected={selected}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {text}
     </StyledBtnDay>
   );

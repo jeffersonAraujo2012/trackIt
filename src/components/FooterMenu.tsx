@@ -50,6 +50,7 @@ const StyledFooterMenu = styled.div`
   bottom: 0;
 
   background: #ffffff;
+  box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.15);
 
   a {
     font-size: 17.976px;

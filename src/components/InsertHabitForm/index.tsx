@@ -1,11 +1,14 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+
 import { PRIMARY_COLOR } from "../../params";
 import Input from "../forms/Input";
 import BtnDay from "./BtnDay";
-import { UserContext } from "../../App";
 import BtnBlueMin from "../forms/BtnBlueMin";
+
+import { UserContext } from "../../App";
+import { HabitContext, IHabit } from "../../pages/Habits";
 
 interface InsertHabitFormProp {
   setShow: (value: boolean) => void;
@@ -15,7 +18,10 @@ export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
   const [habitName, setHabitName] = useState<string>("");
   const [selectedsDays, setSelectedsDays] = useState<boolean[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
   const { user } = useContext(UserContext);
+  const { habits, setHabits } = useContext(HabitContext);
+
   const weekdays = [0, 1, 2, 3, 4, 5, 6];
   const letterWeekdays = "DSTQQSS"; //dom, seg, ter, qua ...
 
@@ -28,7 +34,7 @@ export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
 
     const newHabit = {
       name: habitName,
-      days: days.filter((value) => !!value),
+      days: days.filter((value) => !isNaN(Number(value))),
     };
 
     const config = {
@@ -46,6 +52,7 @@ export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
       setHabitName("");
       setSelectedsDays([]);
       setShow(false);
+      setHabits([...habits, res.data]);
       console.log(res.data)
     });
     promiseAddHabit.catch((error) => alert(error.response.data.message));

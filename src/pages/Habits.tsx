@@ -1,28 +1,31 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { UserContext } from "../App";
+import HabitCard from "../components/HabitCard";
 import InsertHabitForm from "../components/InsertHabitForm";
 import { HEADER_HIGHT, MENU_FOOTER_HIGHT } from "../params";
 
-interface IHabit {
+export interface IHabit {
   id: number;
   name: string;
   days: number[];
 }
 
+export interface IHabitContext {
+  habits: IHabit[];
+  setHabits: (habits: IHabit[]) => void;
+}
+
+export const HabitContext = createContext<IHabitContext>({} as IHabitContext);
+
 export default function Habits() {
   const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
   const [habits, setHabits] = useState<IHabit[]>([]);
+
   const { user } = useContext(UserContext);
 
   useEffect(() => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user?.token}`,
-      },
-    };
-
     const promiseHabits = axios({
       url: "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
       method: "get",
@@ -31,21 +34,33 @@ export default function Habits() {
       },
     });
     promiseHabits.then((res) => setHabits(res.data));
-    promiseHabits.catch((error) => console.log(user?.token));
+    promiseHabits.catch((error) => console.log(error.response.data.message));
   }, []);
 
   return (
-    <StyledHabits>
-      <header>
-        <span>Meus hábitos</span>
-        <button onClick={() => setShowHabitForm(true)}>+</button>
-      </header>
-      {showHabitForm && <InsertHabitForm setShow={setShowHabitForm} />}
-      <p>
-        Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
-        começar a trackear!
-      </p>
-    </StyledHabits>
+    <HabitContext.Provider value={{ habits, setHabits }}>
+      <StyledHabits>
+        <header>
+          <span>Meus hábitos</span>
+          <button onClick={() => setShowHabitForm(true)}>+</button>
+        </header>
+
+        {showHabitForm && <InsertHabitForm setShow={setShowHabitForm} />}
+
+        <div className="habits">
+          {habits.map((habit) => {
+            return <HabitCard hbt={habit} key={habit.id} />;
+          })}
+        </div>
+
+        {habits.length === 0 && (
+          <p>
+            Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
+            começar a trackear!
+          </p>
+        )}
+      </StyledHabits>
+    </HabitContext.Provider>
   );
 }
 
@@ -87,10 +102,14 @@ const StyledHabits = styled.div`
     cursor: pointer;
   }
 
-  p {
+  & > p {
     margin-top: 28px;
     font-size: 17.976px;
     line-height: 22px;
     color: #666666;
+  }
+
+  & > .habits {
+    margin-top: 20px;
   }
 `;
