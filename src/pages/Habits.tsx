@@ -1,10 +1,38 @@
-import { useState } from "react";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import { UserContext } from "../App";
 import InsertHabitForm from "../components/InsertHabitForm";
 import { HEADER_HIGHT, MENU_FOOTER_HIGHT } from "../params";
 
+interface IHabit {
+  id: number;
+  name: string;
+  days: number[];
+}
+
 export default function Habits() {
   const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
+  const [habits, setHabits] = useState<IHabit[]>([]);
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user?.token}`,
+      },
+    };
+
+    const promiseHabits = axios({
+      url: "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+      method: "get",
+      headers: {
+        Authorization: `Bearer ${user?.token}`,
+      },
+    });
+    promiseHabits.then((res) => setHabits(res.data));
+    promiseHabits.catch((error) => console.log(user?.token));
+  }, []);
 
   return (
     <StyledHabits>
@@ -12,7 +40,7 @@ export default function Habits() {
         <span>Meus hábitos</span>
         <button onClick={() => setShowHabitForm(true)}>+</button>
       </header>
-      {showHabitForm && <InsertHabitForm setShow={setShowHabitForm}/>}
+      {showHabitForm && <InsertHabitForm setShow={setShowHabitForm} />}
       <p>
         Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
         começar a trackear!

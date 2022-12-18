@@ -5,6 +5,7 @@ import { PRIMARY_COLOR } from "../../params";
 import Input from "../forms/Input";
 import BtnDay from "./BtnDay";
 import { UserContext } from "../../App";
+import BtnBlueMin from "../forms/BtnBlueMin";
 
 interface InsertHabitFormProp {
   setShow: (value: boolean) => void;
@@ -13,12 +14,14 @@ interface InsertHabitFormProp {
 export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
   const [habitName, setHabitName] = useState<string>("");
   const [selectedsDays, setSelectedsDays] = useState<boolean[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const { user } = useContext(UserContext);
   const weekdays = [0, 1, 2, 3, 4, 5, 6];
   const letterWeekdays = "DSTQQSS"; //dom, seg, ter, qua ...
 
   function addHabit(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
 
     const days = selectedsDays.map((value, index) => value && weekdays[index]);
     console.log(days);
@@ -39,8 +42,14 @@ export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
       newHabit,
       config
     );
-    promiseAddHabit.then((res) => console.log(res.data));
+    promiseAddHabit.then((res) => {
+      setHabitName("");
+      setSelectedsDays([]);
+      setShow(false);
+      console.log(res.data)
+    });
     promiseAddHabit.catch((error) => alert(error.response.data.message));
+    promiseAddHabit.finally(() => setLoading(false));
   }
 
   return (
@@ -50,7 +59,7 @@ export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
         placeholder="nome do hábito"
         value={habitName}
         onChange={(e) => setHabitName(e.currentTarget.value)}
-        disabled={false}
+        disabled={loading}
       />
 
       <div>
@@ -63,16 +72,17 @@ export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
               newSelectedDays[day] = !newSelectedDays[day];
               setSelectedsDays(newSelectedDays);
             }}
+            disabled={loading}
             key={day}
           />
         ))}
       </div>
 
       <div className="btnArea">
-        <button type="button" onClick={() => setShow(false)}>
+        <button type="button" onClick={() => setShow(false)} disabled={loading}>
           Cancelar
         </button>
-        <button type="submit">Salvar</button>
+        <BtnBlueMin text="Salvar" disabled={loading} />
       </div>
     </StyledInsertHabitForm>
   );
