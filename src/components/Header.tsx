@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import { UserContext } from "../../App";
-import { HEADER_HIGHT } from "../../params";
+import { UserContext } from "../App";
+import { HEADER_HIGHT } from "../params";
 
 export default function Header() {
   let {user} = useContext(UserContext);

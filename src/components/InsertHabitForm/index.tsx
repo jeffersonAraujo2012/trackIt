@@ -7,7 +7,7 @@ import Input from "../forms/Input";
 import BtnDay from "./BtnDay";
 import BtnBlueMin from "../forms/BtnBlueMin";
 
-import { UserContext } from "../../App";
+import { ProgressContext, UserContext } from "../../App";
 import { HabitContext, IHabit } from "../../pages/Habits";
 
 interface InsertHabitFormProp {
@@ -21,6 +21,7 @@ export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
 
   const { user } = useContext(UserContext);
   const { habits, setHabits } = useContext(HabitContext);
+  const { numHabitsDay, setNumHabitsDay } = useContext(ProgressContext);
 
   const weekdays = [0, 1, 2, 3, 4, 5, 6];
   const letterWeekdays = "DSTQQSS"; //dom, seg, ter, qua ...
@@ -53,6 +54,9 @@ export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
       setSelectedsDays([]);
       setShow(false);
       setHabits([...habits, res.data]);
+      
+      const today = new Date().getDay();
+      if (res.data.days.includes(today)) setNumHabitsDay(numHabitsDay + 1);
       console.log(res.data);
     });
     promiseAddHabit.catch((error) => alert(error.response.data.message));
@@ -98,7 +102,11 @@ export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
         >
           Cancelar
         </button>
-        <BtnBlueMin text="Salvar" disabled={loading} dataTest="habit-create-save-btn" />
+        <BtnBlueMin
+          text="Salvar"
+          disabled={loading}
+          dataTest="habit-create-save-btn"
+        />
       </div>
     </StyledInsertHabitForm>
   );

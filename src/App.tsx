@@ -6,6 +6,7 @@ import "./css/reset.css";
 import Habits from "./pages/Habits";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import Today from "./pages/Today";
 
 interface IUser {
   id: number;
@@ -21,13 +22,24 @@ interface IUserContext {
   setUser: (user: IUser) => void;
 }
 
+interface IProgressContext {
+  numDoneHabitsDay: number;
+  numHabitsDay: number;
+  setNumDoneHabitsDay: (value: number) => void;
+  setNumHabitsDay: (value: number) => void;
+}
+
 export const UserContext = createContext<IUserContext>({
   user: undefined,
   setUser: (user: IUser) => {},
 });
 
+export const ProgressContext = createContext<IProgressContext>({} as IProgressContext);
+
 function App() {
   const localStorageUser = JSON.parse(localStorage.getItem("user") || "");
+  const [numHabitsDay, setNumHabitsDay] = useState<number>(1);
+  const [numDoneHabitsDay, setNumDoneHabitsDay] = useState<number>(0);
   const [user, setUser] = useState<IUser>(localStorageUser);
   const location = useLocation();
 
@@ -38,15 +50,18 @@ function App() {
     return false;
   }
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      {!isLocationLoginOrSignUp() && <Header />}
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/cadastro" element={<SignUp />} />
-        <Route path="/habitos" element={<Habits />} />
-      </Routes>
-      {!isLocationLoginOrSignUp() && <FooterMenu />}
-    </UserContext.Provider>
+    <ProgressContext.Provider value={{numDoneHabitsDay, setNumDoneHabitsDay, numHabitsDay, setNumHabitsDay, }}>
+      <UserContext.Provider value={{ user, setUser }}>
+        {!isLocationLoginOrSignUp() && <Header />}
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/cadastro" element={<SignUp />} />
+          <Route path="/habitos" element={<Habits />} />
+          <Route path="/hoje" element={<Today />} />
+        </Routes>
+        {!isLocationLoginOrSignUp() && <FooterMenu />}
+      </UserContext.Provider>
+    </ProgressContext.Provider>
   );
 }
 

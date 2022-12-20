@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { UserContext } from "../App";
+import { ProgressContext, UserContext } from "../App";
 import HabitCard from "../components/HabitCard";
 import InsertHabitForm from "../components/InsertHabitForm";
 import { HEADER_HIGHT, MENU_FOOTER_HIGHT } from "../params";
@@ -22,6 +22,7 @@ export const HabitContext = createContext<IHabitContext>({} as IHabitContext);
 export default function Habits() {
   const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
   const [habits, setHabits] = useState<IHabit[]>([]);
+  const { setNumHabitsDay } = useContext(ProgressContext);
 
   const { user } = useContext(UserContext);
 
@@ -33,7 +34,13 @@ export default function Habits() {
         Authorization: `Bearer ${user?.token}`,
       },
     });
-    promiseHabits.then((res) => setHabits(res.data));
+    promiseHabits.then((res) => {
+      const numHabitsDay = habits.filter((habit) =>
+        habit.days.includes(new Date().getDay())
+      ).length;
+      setNumHabitsDay(numHabitsDay);
+      setHabits(res.data);
+    });
     promiseHabits.catch((error) => console.log(error.response.data.message));
   }, []);
 

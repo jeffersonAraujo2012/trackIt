@@ -1,17 +1,23 @@
 import styled from "styled-components";
 import { MENU_FOOTER_HIGHT } from "../params";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { ProgressContext } from "../App";
 
 export default function FooterMenu() {
+  const {numDoneHabitsDay, numHabitsDay} = useContext(ProgressContext);
+  const progressValue = Math.ceil((numDoneHabitsDay/numHabitsDay) * 100);
+  console.log(numDoneHabitsDay, numHabitsDay);
+
   return (
     <StyledFooterMenu>
       <Link to="/habitos">Hábitos</Link>
 
-      <div>
+      <Link to="/hoje" className="progress">
         <CircularProgressbar
-          value={70}
+          value={progressValue}
           text="Hoje"
           background={true}
           backgroundPadding={5}
@@ -27,10 +33,10 @@ export default function FooterMenu() {
             },
             background: {
               fill: "#52b6ff",
-            }
+            },
           }}
         />
-      </div>
+      </Link>
 
       <Link to="/historico">Histórico</Link>
     </StyledFooterMenu>
@@ -61,7 +67,7 @@ const StyledFooterMenu = styled.div`
     color: #52b6ff;
   }
 
-  & > div {
+  a.progress {
     position: relative;
     bottom: 20px;
     width: 91px;
