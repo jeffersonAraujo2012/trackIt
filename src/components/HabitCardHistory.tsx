@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { HistoryContext, IHabitHistory } from "../pages/Today";
 import doneIcon from "../assets/images/done.svg";
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ProgressContext, UserContext } from "../App";
+import { TailSpin } from "react-loader-spinner";
 
 interface IHabitCardHistoryProps {
   habit: IHabitHistory;
@@ -21,8 +22,11 @@ export default function HabitCardHistory({ habit }: IHabitCardHistoryProps) {
   const { user } = useContext(UserContext);
   const { auxHabit, setAuxHabit } = useContext(HistoryContext);
   const { numDoneHabitsDay, setNumDoneHabitsDay } = useContext(ProgressContext);
+  const [loading, setLoading] = useState<boolean>(false);
 
   function doneHabitToggle() {
+    setLoading(true);
+
     const config = {
       headers: {
         authorization: `Bearer ${user?.token}`,
@@ -40,6 +44,7 @@ export default function HabitCardHistory({ habit }: IHabitCardHistoryProps) {
         setAuxHabit(!auxHabit);
       });
       promiseCheck.catch((error) => alert(error.response.data.message));
+      promiseCheck.finally(() => setTimeout(()=>setLoading(false),500));
     } else {
       const promiseUncheck = axios.post(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/uncheck`,
@@ -51,6 +56,7 @@ export default function HabitCardHistory({ habit }: IHabitCardHistoryProps) {
         setAuxHabit(!auxHabit);
       });
       promiseUncheck.catch((error) => alert(error.response.data.message));
+      promiseUncheck.finally(() => setTimeout(()=>setLoading(false),500));
     }
   }
 
@@ -70,7 +76,20 @@ export default function HabitCardHistory({ habit }: IHabitCardHistoryProps) {
         </p>
       </div>
       <div onClick={doneHabitToggle}>
-        <img src={doneIcon} alt={done ? "Feito" : "A fazer"} />
+        {loading ? (
+          <TailSpin
+            height="40"
+            width="40"
+            color="white"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        ) : (
+          <img src={doneIcon} alt={done ? "Feito" : "A fazer"} />
+        )}
       </div>
     </StyledHabitCardHistory>
   );
