@@ -35,7 +35,7 @@ export default function Habits() {
       },
     });
     promiseHabits.then((res) => {
-      const numHabitsDay = habits.filter((habit) =>
+      const numHabitsDay = res.data.filter((habit: any) =>
         habit.days.includes(new Date().getDay())
       ).length;
       setNumHabitsDay(numHabitsDay);

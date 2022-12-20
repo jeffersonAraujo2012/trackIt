@@ -6,7 +6,7 @@ import BtnDay from "./InsertHabitForm/BtnDay";
 
 import deleteIcon from "../assets/images/delete.svg";
 import { HabitContext, IHabit } from "../pages/Habits";
-import { UserContext } from "../App";
+import { ProgressContext, UserContext } from "../App";
 
 interface IHabitCardProps {
   hbt: {
@@ -20,6 +20,7 @@ export default function HabitCard({ hbt }: IHabitCardProps) {
   const letterWeekdays: string = "DSTQQSS"; //dom, seg, ter, qua ...
   const { user } = useContext(UserContext);
   const { habits, setHabits } = useContext(HabitContext);
+  const {numHabitsDay, setNumHabitsDay} = useContext(ProgressContext);
   const {id, name, days} = hbt;
 
   function deleteHabit(): void {
@@ -40,6 +41,7 @@ export default function HabitCard({ hbt }: IHabitCardProps) {
       );
       promiseDelHabit.then(() => {
         const newHabits = habits.filter((habit) => habit.id !== id);
+        setNumHabitsDay(numHabitsDay - 1);
         setHabits(newHabits);
       });
       promiseDelHabit.catch((error) => alert(error.response.data.message));

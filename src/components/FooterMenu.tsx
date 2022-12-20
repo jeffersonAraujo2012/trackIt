@@ -3,13 +3,41 @@ import { MENU_FOOTER_HIGHT } from "../params";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { ProgressContext } from "../App";
+import { useContext, useEffect } from "react";
+import { ProgressContext, UserContext } from "../App";
+import axios from "axios";
 
 export default function FooterMenu() {
-  const {numDoneHabitsDay, numHabitsDay} = useContext(ProgressContext);
-  const progressValue = Math.ceil((numDoneHabitsDay/numHabitsDay) * 100);
+  const {
+    numDoneHabitsDay,
+    setNumDoneHabitsDay,
+    numHabitsDay,
+    setNumHabitsDay,
+  } = useContext(ProgressContext);
+  const { user } = useContext(UserContext);
+  const progressValue = Math.ceil((numDoneHabitsDay / numHabitsDay) * 100);
   console.log(numDoneHabitsDay, numHabitsDay);
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user?.token}`,
+      },
+    };
+
+    const promiseHabits = axios.get(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
+      config
+    );
+    promiseHabits.then((res) => {
+      const habits = res.data;
+      setNumHabitsDay(habits.length);
+
+      const doneHabits = habits.filter((habit: any) => habit.done);
+      setNumDoneHabitsDay(doneHabits.length);
+    });
+    promiseHabits.catch((error) => alert(error.response.data.message));
+  }, [numHabitsDay]);
 
   return (
     <StyledFooterMenu>
