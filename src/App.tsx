@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import "./css/reset.css";
 import Habits from "./pages/Habits";
 import Login from "./pages/Login";
+import Records from "./pages/Records";
 import SignUp from "./pages/SignUp";
 import Today from "./pages/Today";
 
@@ -58,6 +59,7 @@ function App() {
           <Route path="/cadastro" element={<SignUp />} />
           <Route path="/habitos" element={<Habits />} />
           <Route path="/hoje" element={<Today />} />
+          <Route path="/historico" element={<Records />} />
         </Routes>
         {!isLocationLoginOrSignUp() && <FooterMenu />}
       </UserContext.Provider>
