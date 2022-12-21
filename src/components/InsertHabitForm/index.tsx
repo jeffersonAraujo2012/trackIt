@@ -8,7 +8,7 @@ import BtnDay from "./BtnDay";
 import BtnBlueMin from "../forms/BtnBlueMin";
 
 import { ProgressContext, UserContext } from "../../App";
-import { HabitContext, IHabit } from "../../pages/Habits";
+import { HabitContext } from "../../pages/Habits";
 
 interface InsertHabitFormProp {
   setShow: (value: boolean) => void;
@@ -24,7 +24,7 @@ export default function InsertHabitForm({ setShow }: InsertHabitFormProp) {
   const { numHabitsDay, setNumHabitsDay } = useContext(ProgressContext);
 
   const weekdays = [0, 1, 2, 3, 4, 5, 6];
-  const letterWeekdays = "DSTQQSS"; //dom, seg, ter, qua ...
+  const letterWeekdays = "DSTQQSS";
 
   function addHabit(e: React.FormEvent) {
     e.preventDefault();

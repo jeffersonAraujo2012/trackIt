@@ -38,7 +38,7 @@ export const UserContext = createContext<IUserContext>({
 export const ProgressContext = createContext<IProgressContext>({} as IProgressContext);
 
 function App() {
-  const localStorageUser = JSON.parse(localStorage.getItem("user") || "");
+  const localStorageUser = JSON.parse(localStorage.getItem("user") || "{}");
   const [numHabitsDay, setNumHabitsDay] = useState<number>(1);
   const [numDoneHabitsDay, setNumDoneHabitsDay] = useState<number>(0);
   const [user, setUser] = useState<IUser>(localStorageUser);
@@ -55,7 +55,7 @@ function App() {
       <UserContext.Provider value={{ user, setUser }}>
         {!isLocationLoginOrSignUp() && <Header />}
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route index element={<Login />} />
           <Route path="/cadastro" element={<SignUp />} />
           <Route path="/habitos" element={<Habits />} />
           <Route path="/hoje" element={<Today />} />

@@ -5,7 +5,7 @@ import { useContext } from "react";
 import BtnDay from "./InsertHabitForm/BtnDay";
 
 import deleteIcon from "../assets/images/delete.svg";
-import { HabitContext, IHabit } from "../pages/Habits";
+import { HabitContext } from "../pages/Habits";
 import { ProgressContext, UserContext } from "../App";
 
 interface IHabitCardProps {
@@ -17,7 +17,7 @@ interface IHabitCardProps {
 }
 
 export default function HabitCard({ hbt }: IHabitCardProps) {
-  const letterWeekdays: string = "DSTQQSS"; //dom, seg, ter, qua ...
+  const letterWeekdays: string = "DSTQQSS";
   const { user } = useContext(UserContext);
   const { habits, setHabits } = useContext(HabitContext);
   const {numHabitsDay, setNumHabitsDay} = useContext(ProgressContext);

@@ -31,12 +31,7 @@ export default function Today() {
   const [habits, setHabits] = useState<IHabitHistory[]>([]);
   const [auxHabit, setAuxHabit] = useState<boolean>(false); // Just for force useEffect
   const { user } = useContext(UserContext);
-  const {
-    numDoneHabitsDay,
-    setNumDoneHabitsDay,
-    numHabitsDay,
-    setNumHabitsDay,
-  } = useContext(ProgressContext);
+  const { setNumDoneHabitsDay, setNumHabitsDay } = useContext(ProgressContext);
 
   const today = new Date();
   const todayName = today.toLocaleString("default", { weekday: "long" });
